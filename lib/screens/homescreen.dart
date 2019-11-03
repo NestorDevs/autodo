@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:autodo/refueling/history.dart';
 import 'package:autodo/screens/editrepeats.dart';
 import 'package:autodo/screens/screens.dart';
+import 'package:autodo/sharedmodels/searchbar.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/sharedmodels/sharedmodels.dart';
 import 'package:autodo/maintenance/history.dart';
@@ -65,33 +66,7 @@ class HomeScreenState extends State<HomeScreen> {
     return Container(
       decoration: scaffoldBackgroundGradient(),
       child: Scaffold(
-        appBar: AppBar(
-          title: Center(
-            child: Text(
-              'auToDo',
-              style: logoStyle,
-            ),
-          ),
-          actions: <Widget>[
-            PopupMenuButton<dropdown>(
-              icon: Icon(Icons.more_vert),
-              onSelected: (dropdown res) {
-                if (res == dropdown.filter) {
-                  showDialog(
-                    context: context,
-                    builder: (context) => CarFilters(() => setState(() {})),
-                  );
-                }
-              },
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<dropdown>>[
-                const PopupMenuItem<dropdown>(
-                  value: dropdown.filter,
-                  child: Text('filter'),
-                ),
-              ],
-            ),
-          ],
-        ),
+        appBar: SearchBar(),
         body: (signedIn) ? bodyStack : Container(),
         bottomNavigationBar: BottomNavigationBar(  
           type: BottomNavigationBarType.fixed,

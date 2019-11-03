@@ -5,3 +5,4 @@ export './cartag.dart';
 export './createentrybutton.dart';
 export './navdrawer.dart';
 export './sliverfooter.dart';
+export './searchbar.dart';
