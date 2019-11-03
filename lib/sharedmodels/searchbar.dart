@@ -51,7 +51,17 @@ class SearchBarState extends State<SearchBar> with TickerProviderStateMixin {
       'auToDo',
       style: logoStyle,
     );
-      print(inSearchMode);
+    Widget searchField = (inSearchMode || slideCtrl.isAnimating) ?
+      Container( 
+        width: slideCurve.value * (width / 2 + 30),
+        child: TextFormField( 
+        autofocus: true,
+        decoration: InputDecoration(  
+          hintText: 'Search'
+        ),
+        onChanged: (value) { // TODO: search here
+        },
+      )) : Container();
 
     return Container(
       width: width, 
@@ -85,15 +95,17 @@ class SearchBarState extends State<SearchBar> with TickerProviderStateMixin {
                 children: <Widget>[
                   Container( 
                     width: (slideCurve.value * (width / 2 + 36)) + 48, // currently a magic number for alignment, figure this out
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: IconButton(  
-                        icon: Icon(Icons.search),
-                        onPressed: () {
-                          if (slideCtrl.isAnimating) return;
-                          (inSearchMode) ? slideCtrl.reverse() : slideCtrl.forward();
-                        }
-                      ),
+                    child: Row(
+                      children: <Widget>[
+                        IconButton(  
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            if (slideCtrl.isAnimating) return;
+                            (inSearchMode) ? slideCtrl.reverse() : slideCtrl.forward();
+                          }
+                        ),
+                        searchField
+                      ],
                     ),
                   ),
                   IconButton(  
