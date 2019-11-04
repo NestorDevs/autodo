@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/refueling/history.dart';
 import 'package:autodo/screens/editrepeats.dart';
 import 'package:autodo/screens/screens.dart';
@@ -22,6 +23,7 @@ class HomeScreenState extends State<HomeScreen> {
   int tabIndex = 0;
   StreamSubscription authStream;
   bool signedIn = false;
+  StreamController tabStream;
 
   void onAuthChange(FirebaseUser user) {
     if (user!= null && user.uid != null) {
@@ -40,8 +42,16 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   @override 
+  void initState() {
+    tabStream = StreamController.broadcast();
+    tabStream.stream.listen(TodoBLoC().listenForActive);
+    super.initState();
+  }
+
+  @override 
   void dispose() {
     authStream.cancel();
+    tabStream.close();
     super.dispose();
   }
 
@@ -72,7 +82,10 @@ class HomeScreenState extends State<HomeScreen> {
           type: BottomNavigationBarType.fixed,
           showSelectedLabels: true,
           showUnselectedLabels: false,
-          onTap: (index) => setState(() => tabIndex = index),
+          onTap: (index) {
+            tabStream.sink.add(index);
+            setState(() => tabIndex = index);
+          },
           currentIndex: tabIndex,
           items: [
             BottomNavigationBarItem(

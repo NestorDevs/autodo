@@ -48,12 +48,6 @@ class FilteringBLoC {
     return filters[carName];
   }
 
-  Stream filteredDocuments() {
-    StreamController.broadcast(
-
-    );
-  } 
-
   // Make the object a Singleton
   static final FilteringBLoC _bloc = FilteringBLoC._internal();
   factory FilteringBLoC() {

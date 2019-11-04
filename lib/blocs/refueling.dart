@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:autodo/blocs/cars.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/refueling/refuelingcard.dart';
@@ -5,6 +7,26 @@ import 'package:autodo/items/items.dart';
 import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 
 class RefuelingBLoC extends BLoC {
+  List Function(List) searchFunc = (list) => list;
+  StreamController itemStream = StreamController.broadcast(); // ignore: close_sinks
+
+  void onNewSnapshot(dynamic snap) {
+    print('here');
+    itemStream.add(snap);
+    // if (!active || snap.hasError || !snap.hasData || 
+    //     snap.data.documents.length == 0) {
+    //   itemStream.add(snap);
+    // } else {
+    //   return snap.data.documents
+    //     .where((item) => filter(item, searchTerm))
+    //     .toList();
+    // }
+  }
+
+  void init() {
+    firebaseStream('refuelings').listen(onNewSnapshot);
+  }
+
   @override
   Widget buildItem(dynamic snap, int index) {
     var odom = snap.data['odom'].toInt();
@@ -21,7 +43,7 @@ class RefuelingBLoC extends BLoC {
   }
 
   StreamBuilder items() {
-    return buildList('refuelings');
+    return buildList('refuelings', itemStream.stream);
   }
 
   Future<void> push(RefuelingItem item) async {

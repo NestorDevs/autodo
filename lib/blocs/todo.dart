@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autodo/items/items.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,30 @@ import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 import 'package:autodo/blocs/notifications.dart';
 
 class TodoBLoC extends BLoC {
+  bool active = false;
+  String searchTerm;
+  StreamController contentUpdated = StreamController.broadcast(); // ignore: close_sinks
+  // search criteria: returns any todo item that contains the query in its name
+  // maybe extend this to allow searching by other options??
+  var filter = (item, query) => item.name.toLowerCase().contains(query.toLowerCase());
+
+  StreamController itemStream = StreamController.broadcast(); // ignore: close_sinks
+
+  void onNewSnapshot(dynamic snap) {
+    if (!active || snap.hasError || !snap.hasData || 
+        snap.data.documents.length == 0) {
+      itemStream.add(snap);
+    } else {
+      return snap.data.documents
+        .where((item) => filter(item, searchTerm))
+        .toList();
+    }
+  }
+
+  void init() {
+    firebaseStream('todos').listen(onNewSnapshot);
+  }
+
   @override
   Widget buildItem(dynamic snapshot, int index) {
     bool first = index == 0;
@@ -52,7 +78,7 @@ class TodoBLoC extends BLoC {
   }
 
   StreamBuilder items() {
-    return buildList('todos');
+    return buildList('todos', itemStream.stream);
   }
 
   Future<void> scheduleNotification(MaintenanceTodoItem item) async {
@@ -90,6 +116,17 @@ class TodoBLoC extends BLoC {
         .document(item.ref);
     batch.setData(ref, item.toJSON());
     return batch;
+  }
+
+  void listenForActive(dynamic index) {
+    print(index);
+    active = index == 0;
+  }
+
+  void listenForSearch(dynamic value) {
+    print(value);
+    searchTerm = value;
+    // contentUpdated.add(true);
   }
 
   // Make the object a Singleton

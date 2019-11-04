@@ -6,15 +6,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class BLoC {
   var _past;
 
+  Stream firebaseStream(collection) => FirestoreBLoC().getUserDocument()
+    .collection(collection)
+    .snapshots();
+
   Widget buildItem(dynamic item, int index) => Container();
 
   List sortItems(List items) => items;
 
-  StreamBuilder buildList(String collection) {
+  StreamBuilder buildList(String collection, Stream stream) {
     return StreamBuilder(  
-      stream: FirestoreBLoC().getUserDocument()
-        .collection(collection)
-        .snapshots(),
+      stream: stream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center( 

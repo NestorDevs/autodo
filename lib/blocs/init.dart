@@ -1,3 +1,4 @@
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/blocs/filtering.dart';
 import 'package:autodo/blocs/repeating.dart';
 import 'package:autodo/blocs/subcomponents/subcomponents.dart';
@@ -10,6 +11,9 @@ Future<void> initBLoCs(String uuid) async {
   FirestoreBLoC().setUserDocument(uuid);
   await RepeatingBLoC().updateUpcomingTodos();
   await FilteringBLoC().initialize();
+  TodoBLoC().init();
+  RefuelingBLoC().init();
+  RepeatingBLoC().init();
 }
 
 /// Signs up a new user and creates their user document

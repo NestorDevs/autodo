@@ -29,8 +29,9 @@ List<Repeat> defaults = [
 
 class RepeatingBLoC extends BLoC {
   static final Firestore _db = Firestore.instance;
-  Repeat _past;
   List<Repeat> repeats = defaults;
+  List Function(List) searchFunc = (list) => list;
+
   /**
    * Maps containing the related tasks for each repeating task type.
    * Example Map:
@@ -48,11 +49,29 @@ class RepeatingBLoC extends BLoC {
 
   final StreamController editStream = StreamController();
 
+  StreamController itemStream = StreamController.broadcast(); // ignore: close_sinks
+
+  void onNewSnapshot(dynamic snap) {
+    itemStream.add(snap);
+    // if (!active || snap.hasError || !snap.hasData || 
+    //     snap.data.documents.length == 0) {
+    //   itemStream.add(snap);
+    // } else {
+    //   return snap.data.documents
+    //     .where((item) => filter(item, searchTerm))
+    //     .toList();
+    // }
+  }
+
+  void init() {
+    firebaseStream('repeats').listen(onNewSnapshot);
+  }
+
   @override
   Widget buildItem(dynamic snapshot, int index) => RepeatEditor(item: Repeat.fromJSON(snapshot.data, snapshot.documentID));
 
   StreamBuilder items() {
-    return buildList('repeats');
+    return buildList('repeats', itemStream.stream);
   }
 
   List<Repeat> _convertDocuments(List<DocumentSnapshot> docs) {

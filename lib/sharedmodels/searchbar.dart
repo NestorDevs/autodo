@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:autodo/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/sharedmodels/carfilters.dart';
@@ -14,6 +17,7 @@ class SearchBarState extends State<SearchBar> with TickerProviderStateMixin {
   AnimationController slideCtrl;
   var slideCurve;
   bool inSearchMode = false;
+  StreamController searchStream;
 
   animationStatusListener(AnimationStatus animationStatus) {
     if (animationStatus == AnimationStatus.completed)
@@ -35,12 +39,17 @@ class SearchBarState extends State<SearchBar> with TickerProviderStateMixin {
       parent: slideCtrl,
       curve: Curves.easeOutCubic
     ));
+
+    searchStream = StreamController.broadcast();
+    searchStream.stream.listen(TodoBLoC().listenForSearch);
+
     super.initState();
   }
 
   @override 
   void dispose() {
     slideCtrl.dispose();
+    searchStream.close();
     super.dispose();
   }
 
@@ -59,12 +68,11 @@ class SearchBarState extends State<SearchBar> with TickerProviderStateMixin {
         decoration: InputDecoration(  
           hintText: 'Search'
         ),
-        onChanged: (value) { // TODO: search here
-        },
+        onChanged: (value) => searchStream.add(value),
       )) : Container();
 
     return Container(
-      width: width, 
+      width: width,
       height: widget.preferredSize.height,
       color: Colors.transparent,
       child: SafeArea(

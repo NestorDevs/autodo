@@ -7,6 +7,16 @@ class MaintenanceHistory extends StatefulWidget {
 }
 
 class MaintenanceHistoryState extends State<MaintenanceHistory> {
+  @override 
+  void initState() {
+    // this will rebuild the widget each time that the TodoBLoC says to
+    TodoBLoC().contentUpdated.stream.listen((data) {
+      print('history');
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) => TodoBLoC().items();
 }
