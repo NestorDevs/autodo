@@ -18,6 +18,7 @@ class TodoBLoC extends BLoC {
   StreamController itemStream = StreamController.broadcast(); // ignore: close_sinks
 
   void onNewSnapshot(dynamic snap) {
+    print('new snap');
     if (!active || snap.hasError || !snap.hasData || 
         snap.data.documents.length == 0) {
       itemStream.add(snap);

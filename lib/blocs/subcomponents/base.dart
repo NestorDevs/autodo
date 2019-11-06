@@ -16,7 +16,10 @@ class BLoC {
 
   StreamBuilder buildList(String collection, Stream stream) {
     return StreamBuilder(  
-      stream: stream,
+      // stream: stream,
+      stream: FirestoreBLoC().getUserDocument()
+        .collection(collection)
+        .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center( 
