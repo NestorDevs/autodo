@@ -48,7 +48,7 @@ class Car {
       'numRefuelings': numRefuelings,
       'averageEfficiency': averageEfficiency,
       'distanceRate': distanceRate,
-      'distanceRateHistory': distanceRateHistory.map((val) => {
+      'distanceRateHistory': distanceRateHistory?.map((val) => {
         'date': val.date.millisecondsSinceEpoch, 
         'distanceRate': val.distanceRate
       }),

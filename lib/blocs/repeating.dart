@@ -164,7 +164,6 @@ class RepeatingBLoC extends BLoC {
 
     List<Car> cars = await CarsBLoC().getCars();
     cars.forEach((car) async {
-      print('here');
       await _findLatestCompletedTodos(car.name);
       await _findUpcomingRepeatTodos(car.name);
       repeats.forEach((repeat) {

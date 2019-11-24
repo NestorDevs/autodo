@@ -37,6 +37,7 @@ class Auth implements BaseAuth {
       currentUser = res.user.uid;
       currentUserName = res.user.email;
     } on PlatformException {
+      // TODO: replace this logic with checking for the three different error types
       print(
           "PlatformException: Cannot create a user with an email that already exists");
       return "";
@@ -69,12 +70,7 @@ class Auth implements BaseAuth {
     return user.uid;
   }
 
-  Future<String> getCurrentUserName() async {
-    // FirebaseUser user = await _firebaseAuth.currentUser();
-    // if (user != null && user.displayName != "")
-    //   return user.displayName;
-    // else if (user != null) return user.email;
-    // return "NO_USER";
+  String getCurrentUserName() {
     return currentUserName;
   }
 
@@ -90,6 +86,8 @@ class Auth implements BaseAuth {
   StreamSubscription<FirebaseUser> listen(Function(FirebaseUser) fn) {
     return _firebaseAuth.onAuthStateChanged.listen(fn);
   }
+
+  Stream<FirebaseUser> signInStream() => _firebaseAuth.onAuthStateChanged;
 
   // Make the object a Singleton
   static final Auth _auth = Auth._internal();

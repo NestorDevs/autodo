@@ -106,12 +106,11 @@ class NavDrawerState extends State<NavDrawer> {
                 return SizedBox.expand(
                   child: DrawerHeader(
                     child: FutureBuilder<String>(
-                      future: Auth().getCurrentUserName(),
+                      future: Auth().fetchUser(), // TODO: this returns the uuid, not email
                       builder:
                           (BuildContext context, AsyncSnapshot<String> snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.none:
-                            return Text('here');
                           case ConnectionState.waiting:
                           case ConnectionState.active:
                             return Text('...');

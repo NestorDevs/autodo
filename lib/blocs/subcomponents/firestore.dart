@@ -7,7 +7,16 @@ class FirestoreBLoC {
 
   Future<void> createUserDocument(String uuid) async {
     userDoc = _db.collection('users').document(uuid);
-    await userDoc.setData(Map<String, Object>());
+    while (true) {
+      // only return from this function when we've successfully created 
+      // the new user document
+      try {
+        await userDoc.setData(Map<String, Object>());
+      } catch (e) {
+        continue;
+      }
+      return;
+    }
   }
 
   void setUserDocument(String uuid) {

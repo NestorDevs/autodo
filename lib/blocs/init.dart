@@ -3,6 +3,9 @@ import 'package:autodo/blocs/repeating.dart';
 import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 import 'package:autodo/blocs/userauth.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
+
+StreamController<String> initReady;
 
 /// Initializes the content for all of the BLoCs
 /// in the proper order to prevent issues with
@@ -19,8 +22,12 @@ Future<void> initNewUser(String email, String password) async {
   String uuid = await Auth().signUp(email, password);
   if (uuid == null || uuid == "")
     throw SignInFailure();
+
   await FirestoreBLoC().createUserDocument(uuid);
+  print(FirestoreBLoC().getUserDocument().path);
   await initBLoCs(uuid);
+  print('kaljsd');
+  initReady.add(uuid);
 }
 
 Future<void> loadingSequence(BuildContext context) async {
@@ -39,3 +46,11 @@ Future<void> initExistingUser(String email, String password) async {
     throw SignInFailure();
   await initBLoCs(uuid);
 }
+
+void setupStreams() {
+  initReady = StreamController<String>.broadcast();
+}
+
+StreamSubscription<String> listenForInit(fn) {
+  return initReady.stream.listen(fn);
+} 

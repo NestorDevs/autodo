@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:autodo/sharedmodels/sharedmodels.dart';
 import 'package:autodo/maintenance/history.dart';
 import 'package:autodo/theme.dart';
-import 'package:autodo/blocs/userauth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:autodo/blocs/init.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -21,22 +20,19 @@ class HomeScreenState extends State<HomeScreen> {
   int tabIndex = 0;
   StreamSubscription authStream;
   bool signedIn = false;
-  var repeatsScreen = EditRepeatsScreen();
+  var repeatsScreen;
 
-  void onAuthChange(FirebaseUser user) {
-    if (user != null && user.uid != null) {
-      setState(() {
-        signedIn = true;
-      });
-    } else {
-      setState(() {
-        signedIn = false;
-      });
+  void onAuthChange(String uuid) {
+    print(uuid);
+    if (uuid != null) {
+      repeatsScreen = EditRepeatsScreen();
+      print('hkas');
+      setState(() => signedIn = true);
     }
   }
 
   HomeScreenState() {
-    authStream = Auth().listen(onAuthChange);
+    authStream = listenForInit(onAuthChange);
   }
 
   @override 
@@ -61,8 +57,9 @@ class HomeScreenState extends State<HomeScreen> {
         index: tabIndex,
         children: bodies,
       );
+      print('kasl');
     }
-    
+
     return Container(
       decoration: scaffoldBackgroundGradient(),
       child: Scaffold(
@@ -101,7 +98,7 @@ class HomeScreenState extends State<HomeScreen> {
           showUnselectedLabels: false,
           onTap: (index) => setState(() {
             if (tabIndex == 3)
-              repeatsScreen.save();
+              repeatsScreen?.save();
             tabIndex = index;
           }),
           currentIndex: tabIndex,

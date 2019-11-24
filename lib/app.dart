@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:autodo/screens/screens.dart';
 import 'package:autodo/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:autodo/blocs/blocs.dart';
 
 class AutodoApp extends StatefulWidget {
   AutodoApp() {
@@ -27,6 +28,7 @@ class AutodoAppState extends State<AutodoApp> {
   @override
   Widget build(BuildContext context) {
     var theme = createTheme();
+    setupStreams();
     return MaterialApp(
       theme: theme,
       initialRoute: '/load',
