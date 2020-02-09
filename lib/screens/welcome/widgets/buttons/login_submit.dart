@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:autodo/localization.dart';
+import 'package:autodo/blocs/blocs.dart';
 
 class LoginSubmitButton extends StatelessWidget {
   final Function onPressed;
@@ -21,7 +21,7 @@ class LoginSubmitButton extends StatelessWidget {
             ),
             color: Theme.of(context).primaryColor,
             child: Text(
-              AutodoLocalizations.login,
+              currentL10n(context).login,
               style: Theme.of(context).accentTextTheme.button,
             ),
             onPressed: () => onPressed(),

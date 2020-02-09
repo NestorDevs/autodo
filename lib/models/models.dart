@@ -11,3 +11,5 @@ export 'src/car.dart';
 export 'src/repeat.dart';
 export 'src/distanceratepoint.dart';
 export 'src/fuel_mileage_point.dart';
+export 'src/units.dart';
+export 'src/l10n_base.dart';

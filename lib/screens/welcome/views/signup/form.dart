@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/localization.dart';
 import '../new_user_setup/screen.dart';
 import '../../widgets/barrel.dart';
 
@@ -43,7 +42,7 @@ class _SignupFormState extends State<SignupForm> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        AutodoLocalizations.loginFailure,
+                        currentL10n(context).loginFailure,
                       ),
                       Icon(Icons.error)
                     ],
@@ -61,7 +60,7 @@ class _SignupFormState extends State<SignupForm> {
                   content: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(AutodoLocalizations.signingUpEllipsis),
+                      Text(currentL10n(context).signingUpEllipsis),
                       CircularProgressIndicator(),
                     ],
                   ),
@@ -75,13 +74,13 @@ class _SignupFormState extends State<SignupForm> {
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: Text(AutodoLocalizations.verificationSent,
+                title: Text(currentL10n(context).verificationSent,
                     style: Theme.of(context).primaryTextTheme.title),
-                content: Text(AutodoLocalizations.verificationDialogContent,
+                content: Text(currentL10n(context).verificationDialogContent,
                     style: Theme.of(context).primaryTextTheme.body1),
                 actions: [
                   FlatButton(
-                    child: Text(AutodoLocalizations.back,
+                    child: Text(currentL10n(context).back,
                         style: Theme.of(context).primaryTextTheme.button),
                     onPressed: () => Navigator.pop(context),
                   ),

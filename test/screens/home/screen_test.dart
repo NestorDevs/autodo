@@ -9,7 +9,6 @@ import 'package:autodo/screens/home/screen.dart';
 import 'package:autodo/screens/add_edit/barrel.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
-import 'package:autodo/localization.dart';
 
 class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
     implements TodosBloc {}
@@ -73,7 +72,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.byKey(scaffoldKey), findsOneWidget);
-      expect(find.text(AutodoLocalizations.appTitle), findsOneWidget);
+      expect(find.text('auToDo'), findsOneWidget);
     });
 
     testWidgets('tab switch', (WidgetTester tester) async {

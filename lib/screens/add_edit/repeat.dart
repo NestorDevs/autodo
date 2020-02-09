@@ -1,13 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 import 'package:autodo/models/models.dart';
 import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/localization.dart';
 import 'package:autodo/util.dart';
 import 'forms/barrel.dart';
 
@@ -125,8 +121,8 @@ class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
         appBar: AppBar(
           title: Text(
             isEditing
-                ? AutodoLocalizations.editRepeat
-                : AutodoLocalizations.addRepeat,
+                ? currentL10n(context).editRepeat
+                : currentL10n(context).addRepeat,
           ),
         ),
         body: Form(
@@ -181,8 +177,8 @@ class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
                 ))),
         floatingActionButton: FloatingActionButton(
           tooltip: isEditing
-              ? AutodoLocalizations.saveChanges
-              : AutodoLocalizations.addRefueling,
+              ? currentL10n(context).saveChanges
+              : currentL10n(context).addRefueling,
           child: Icon(isEditing ? Icons.check : Icons.add),
           onPressed: () {
             if (_formKey.currentState.validate()) {

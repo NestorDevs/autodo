@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/widgets/widgets.dart';
-import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
 
 class LegalNotice extends StatelessWidget {
@@ -33,26 +32,26 @@ class LegalNotice extends StatelessWidget {
         textAlign: TextAlign.center,
         text: TextSpan(children: [
           TextSpan(
-            text: AutodoLocalizations.legal1 + ' ',
+            text: currentL10n(context).legal1 + ' ',
             style: finePrint(),
           ),
           TextSpan(
-            text: AutodoLocalizations.legal2,
+            text: currentL10n(context).legal2,
             style: linkStyle(),
             recognizer: TapGestureRecognizer()..onTap = () {},
           ),
           TextSpan(
-            text: ' ' + AutodoLocalizations.legal3 + ' ',
+            text: ' ' + currentL10n(context).legal3 + ' ',
             style: finePrint(),
           ),
           TextSpan(
-            text: AutodoLocalizations.legal4,
+            text: currentL10n(context).legal4,
             style: linkStyle(),
             recognizer: TapGestureRecognizer()..onTap = () => onTap(context),
             semanticsLabel: 'Privacy Policy Button',
           ),
           TextSpan(
-            text: ' ' + AutodoLocalizations.legal5,
+            text: ' ' + currentL10n(context).legal5,
             style: finePrint(),
           ),
         ]),

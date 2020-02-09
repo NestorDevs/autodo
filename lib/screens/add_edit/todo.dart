@@ -9,7 +9,6 @@ import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'forms/barrel.dart';
 import 'package:autodo/integ_test_keys.dart';
-import 'package:autodo/localization.dart';
 import 'package:autodo/util.dart';
 
 typedef _OnSaveCallback = Function(String name, DateTime dueDate,
@@ -123,8 +122,8 @@ class _DateFormState extends State<_DateForm> {
         Expanded(
           child: TextFormField(
               decoration: InputDecoration(
-                hintText: AutodoLocalizations.optional,
-                labelText: AutodoLocalizations.dueDate,
+                hintText: currentL10n(context).optional,
+                labelText: currentL10n(context).dueDate,
                 contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 5),
                 border: OutlineInputBorder(
                   borderSide: BorderSide(color: Theme.of(context).primaryColor),
@@ -133,7 +132,7 @@ class _DateFormState extends State<_DateForm> {
               controller: _ctrl,
               keyboardType: TextInputType.datetime,
               validator: (val) =>
-                  isValidDate(val) ? null : AutodoLocalizations.invalidDate,
+                  isValidDate(val) ? null : currentL10n(context).invalidDate,
               onSaved: (val) => widget.onSaved(val),
               textInputAction: (nextNode == null)
                   ? TextInputAction.done
@@ -145,7 +144,7 @@ class _DateFormState extends State<_DateForm> {
         ),
         IconButton(
           icon: Icon(Icons.calendar_today),
-          tooltip: AutodoLocalizations.chooseDate,
+          tooltip: currentL10n(context).chooseDate,
           onPressed: (() => chooseDate(context, _ctrl.text)),
         )
       ]);
@@ -237,8 +236,8 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
         appBar: AppBar(
           title: Text(
             isEditing
-                ? AutodoLocalizations.editTodo
-                : AutodoLocalizations.addTodo,
+                ? currentL10n(context).editTodo
+                : currentL10n(context).addTodo,
           ),
         ),
         body: Form(
@@ -334,8 +333,8 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                 ))),
         floatingActionButton: FloatingActionButton(
           tooltip: isEditing
-              ? AutodoLocalizations.saveChanges
-              : AutodoLocalizations.addRefueling,
+              ? currentL10n(context).saveChanges
+              : currentL10n(context).addRefueling,
           child: Icon(isEditing ? Icons.check : Icons.add),
           onPressed: () {
             if (_formKey.currentState.validate()) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:autodo/localization.dart';
+import 'package:autodo/models/models.dart';
 import 'package:autodo/theme.dart';
 
 class PrivacyPolicy extends StatelessWidget {
@@ -22,7 +22,7 @@ class PrivacyPolicy extends StatelessWidget {
           FlatButton(
             key: buttonKey,
             child: Text(
-              AutodoLocalizations.gotItBang,
+              AutodoLocalization.of(context).gotItBang,
               style: Theme.of(context).primaryTextTheme.button,
             ),
             onPressed: () => Navigator.pop(context),

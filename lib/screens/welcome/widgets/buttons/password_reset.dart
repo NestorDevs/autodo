@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
 
 class _PasswordResetDialog extends StatefulWidget {
@@ -22,7 +21,7 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
 
   @override
   build(context) => AlertDialog(
-          title: Text(AutodoLocalizations.sendPasswordReset,
+          title: Text(currentL10n(context).sendPasswordReset,
               style: Theme.of(context).primaryTextTheme.title),
           content: Form(
             key: _passwordResetKey,
@@ -39,7 +38,7 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
                   textInputAction: TextInputAction.done,
                   autofocus: true,
                   decoration: InputDecoration(
-                      hintText: AutodoLocalizations.email,
+                      hintText: currentL10n(context).email,
                       hintStyle: TextStyle(
                         color: Colors.grey[400],
                       ),
@@ -56,12 +55,12 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
           ),
           actions: [
             FlatButton(
-                child: Text(AutodoLocalizations.back.toUpperCase(),
+                child: Text(currentL10n(context).back.toUpperCase(),
                     style: Theme.of(context).primaryTextTheme.button),
                 onPressed: () => Navigator.pop(context)),
             FlatButton(
                 child: Text(
-                  AutodoLocalizations.send.toUpperCase(),
+                  currentL10n(context).send.toUpperCase(),
                   style: Theme.of(context).primaryTextTheme.button,
                 ),
                 onPressed: () {
@@ -82,7 +81,7 @@ class PasswordResetButton extends StatelessWidget {
   build(context) => FlatButton(
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         child: Text(
-          AutodoLocalizations.forgotYourPassword,
+          currentL10n(context).forgotYourPassword,
           style: linkStyle(),
         ),
         onPressed: () {

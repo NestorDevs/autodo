@@ -1,0 +1,1 @@
+enum Units { IMPERIAL, METRIC }

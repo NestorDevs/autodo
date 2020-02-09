@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
-import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/screens/add_edit/barrel.dart';
 import 'todo_delete_button.dart';
@@ -15,15 +14,15 @@ class _TodoTitle extends StatelessWidget {
 
   _TodoTitle({Key key, @required this.todo}) : super(key: key);
 
-  preface() {
+  preface(context) {
     if (todo.completed) {
-      return AutodoLocalizations.completed;
+      return currentL10n(context).completed;
     } else if (todo.dueState == TodoDueState.PAST_DUE) {
-      return AutodoLocalizations.pastDue;
+      return currentL10n(context).pastDue;
     } else if (todo.dueState == TodoDueState.DUE_SOON) {
-      return AutodoLocalizations.dueSoon;
+      return currentL10n(context).dueSoon;
     } else {
-      return AutodoLocalizations.upcoming;
+      return currentL10n(context).upcoming;
     }
   }
 
@@ -31,7 +30,7 @@ class _TodoTitle extends StatelessWidget {
   build(context) => RichText(
           text: TextSpan(children: [
         TextSpan(
-            text: preface(),
+            text: preface(context),
             style: Theme.of(context).primaryTextTheme.subtitle),
         TextSpan(
             text: todo.name, style: Theme.of(context).primaryTextTheme.title)
@@ -72,9 +71,9 @@ class _TodoDueDate extends StatelessWidget {
         children: <Widget>[
           Icon(Icons.alarm, size: 30),
           Text(
-              AutodoLocalizations.dueOn +
+              currentL10n(context).dueOn +
                   ' ' +
-                  AutodoLocalizations.dateFormat(todo.dueDate),
+                  currentL10n(context).dateFormat(todo.dueDate),
               style: Theme.of(context).primaryTextTheme.body1),
         ],
       );
@@ -104,13 +103,13 @@ class _TodoDueMileage extends StatelessWidget {
           RichText(
               text: TextSpan(children: [
             TextSpan(
-                text: AutodoLocalizations.dueAt + ' ',
+                text: currentL10n(context).dueAt + ' ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
                 text: mileageString(),
                 style: Theme.of(context).primaryTextTheme.subtitle),
             TextSpan(
-              text: ' ' + AutodoLocalizations.distanceUnits,
+              text: ' ' + currentL10n(context).distanceUnits,
               style: Theme.of(context).primaryTextTheme.body1,
             )
           ]))
@@ -130,7 +129,7 @@ class _TodoLastCompleted extends StatelessWidget {
               size: 30),
           Padding(padding: EdgeInsets.all(5)),
           Text(
-            AutodoLocalizations
+            currentL10n(context)
                 .firstTimeDoingTask, // TODO adjust this for past completed
             style:
                 Theme.of(context).primaryTextTheme.body1.copyWith(fontSize: 14),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/localization.dart';
 
 class PasswordForm extends StatelessWidget {
   final Function onSaved;
@@ -19,7 +18,7 @@ class PasswordForm extends StatelessWidget {
           focusNode: node,
           textInputAction: TextInputAction.done,
           decoration: InputDecoration(
-              hintText: AutodoLocalizations.password,
+              hintText: currentL10n(context).password,
               hintStyle: TextStyle(
                 color: Colors.grey[400],
               ),

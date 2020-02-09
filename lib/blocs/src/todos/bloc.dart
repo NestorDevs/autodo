@@ -12,13 +12,14 @@ import '../cars/barrel.dart';
 import '../repeating/barrel.dart';
 import '../notifications/barrel.dart';
 import '../database/barrel.dart';
-import 'package:autodo/localization.dart';
+import '../l10n/l10n.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final DatabaseBloc _dbBloc;
   final CarsBloc _carsBloc;
   final NotificationsBloc _notificationsBloc;
   final RepeatsBloc _repeatsBloc;
+  final L10nBloc _l10nBloc;
   StreamSubscription _dataSubscription, _carsSubscription, _repeatsSubscription;
 
   List<Car> _carsCache;
@@ -27,17 +28,20 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       {@required DatabaseBloc dbBloc,
       @required CarsBloc carsBloc,
       @required NotificationsBloc notificationsBloc,
-      @required RepeatsBloc repeatsBloc})
+      @required RepeatsBloc repeatsBloc,
+      @required L10nBloc l10nBloc,})
       : assert(dbBloc != null),
         assert(carsBloc != null),
         assert(notificationsBloc != null),
         assert(repeatsBloc != null),
+        assert(l10nBloc != null),
         _dbBloc = dbBloc,
         _repeatsBloc = repeatsBloc,
         _carsBloc = carsBloc,
-        _notificationsBloc = notificationsBloc {
-    _dataSubscription = _dbBloc.listen((state) {
-      if (state is DbLoaded) {
+        _notificationsBloc = notificationsBloc,
+        _l10nBloc = l10nBloc {
+    _dataSubscription = _dbBloc.listen((dbState) {
+      if (dbState is DbLoaded && (state is TodosLoaded) || (state is TodosNotLoaded)) {
         add(LoadTodos());
       }
     });
@@ -61,10 +65,18 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       ? (_dbBloc.state as DbLoaded).repository
       : null;
 
+  String get notificationText {
+    try {
+      return (_l10nBloc.state as L10nLoaded).localization.todoDueSoon;
+    } catch (e) {
+      return ''; // not sure if this is really the best default
+    }
+  }
+
   @override
   Stream<TodosState> mapEventToState(TodosEvent event) async* {
     if (event is LoadTodos) {
-      yield* _mapLoadTodosToState();
+      yield* _mapLoadTodosToState(event);
     } else if (event is AddTodo) {
       yield* _mapAddTodoToState(event);
     } else if (event is UpdateTodo) {
@@ -82,7 +94,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapLoadTodosToState() async* {
+  Stream<TodosState> _mapLoadTodosToState(event) async* {
     try {
       final todos = await repo
           .todos()
@@ -99,9 +111,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   void _scheduleNotification(Todo todo) {
+
     _notificationsBloc.add(ScheduleNotification(
         date: todo.dueDate,
-        title: AutodoLocalizations.todoDueSoon + ': ${todo.name}',
+        title: notificationText + ': ${todo.name}',
         body: ''));
   }
 
@@ -116,7 +129,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     _notificationsBloc.add(ReScheduleNotification(
         id: out.notificationID,
         date: out.dueDate,
-        title: AutodoLocalizations.todoDueSoon + ': ${out.name}',
+        title: notificationText + ': ${out.name}',
         body: ''));
     batch.updateData(out.id, out.toEntity().toDocument());
     return out;
@@ -262,7 +275,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // TODO currently not removing todos with a deleted repeat
     // if (!(state is TodosLoaded)) return;
 
-    final todos = (state is TodosLoaded) ? (state as TodosLoaded).todos : [];
+    final todos = (state is TodosLoaded) ? (state as TodosLoaded).todos : <Todo>[];
     List<Todo> updatedTodos = todos;
     for (var r in event.repeats) {
       if (todos.length > 0 &&

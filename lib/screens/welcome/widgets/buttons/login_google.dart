@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:autodo/localization.dart';
 import 'package:autodo/blocs/blocs.dart';
 
 class GoogleLoginButton extends StatelessWidget {
@@ -18,7 +17,7 @@ class GoogleLoginButton extends StatelessWidget {
           LoginWithGooglePressed(),
         );
       },
-      label: Text(AutodoLocalizations.signInWithGoogle,
+      label: Text(currentL10n(context).signInWithGoogle,
           style: TextStyle(color: Colors.white)),
       color: Colors.redAccent,
     );

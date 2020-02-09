@@ -4,7 +4,6 @@ import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
-import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/util.dart';
 
@@ -55,7 +54,7 @@ class _CarFormState extends State<CarForm> {
     autoCompleteField = AutoCompleteTextField<Car>(
       controller: _autocompleteController,
       decoration: defaultInputDecoration(
-              AutodoLocalizations.requiredLiteral, AutodoLocalizations.carName)
+              currentL10n(context).requiredLiteral, currentL10n(context).carName)
           .copyWith(errorText: _carError),
       itemSubmitted: (item) => setState(() {
         _autocompleteController.text = item.name;
@@ -70,7 +69,7 @@ class _CarFormState extends State<CarForm> {
         child: ListTile(
             title: Text(suggestion.name),
             trailing:
-                Text(AutodoLocalizations.mileage + ": ${suggestion.mileage}")),
+                Text(currentL10n(context).mileage + ": ${suggestion.mileage}")),
         padding: EdgeInsets.all(5.0),
       ),
       itemSorter: (a, b) => a.name.length == b.name.length
@@ -93,8 +92,8 @@ class _CarFormState extends State<CarForm> {
         var res = requiredValidator(txt);
         autoCompleteField.updateDecoration(
           decoration: defaultInputDecoration(
-                  AutodoLocalizations.requiredLiteral,
-                  AutodoLocalizations.carName)
+                  currentL10n(context).requiredLiteral,
+                  currentL10n(context).carName)
               .copyWith(errorText: res),
         );
         setState(() => _carError = res);

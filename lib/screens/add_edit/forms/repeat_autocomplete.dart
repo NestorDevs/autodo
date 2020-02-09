@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
-import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/util.dart';
 
@@ -50,8 +49,8 @@ class _RepeatFormState extends State<RepeatForm> {
   build(context) {
     autoCompleteField = AutoCompleteTextField<Repeat>(
       controller: _autocompleteController,
-      decoration: defaultInputDecoration(AutodoLocalizations.requiredLiteral,
-              AutodoLocalizations.repeatName)
+      decoration: defaultInputDecoration(currentL10n(context).requiredLiteral,
+              currentL10n(context).repeatName)
           .copyWith(errorText: _repeatError),
       itemSubmitted: (item) => setState(() {
         _autocompleteController.text = item.name;
@@ -66,7 +65,7 @@ class _RepeatFormState extends State<RepeatForm> {
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
             title: Text(suggestion.name),
-            trailing: Text(AutodoLocalizations.interval +
+            trailing: Text(currentL10n(context).interval +
                 ": ${suggestion.mileageInterval}")),
         padding: EdgeInsets.all(5.0),
       ),
@@ -98,8 +97,8 @@ class _RepeatFormState extends State<RepeatForm> {
           // }
           autoCompleteField.updateDecoration(
             decoration: defaultInputDecoration(
-                    AutodoLocalizations.requiredLiteral,
-                    AutodoLocalizations.carName)
+                    currentL10n(context).requiredLiteral,
+                    currentL10n(context).carName)
                 .copyWith(errorText: res),
           );
           setState(() => _repeatError = res);

@@ -5,7 +5,6 @@ import 'package:autodo/models/models.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/screens/add_edit/barrel.dart';
-import 'package:autodo/localization.dart';
 
 class _RefuelingTitle extends StatelessWidget {
   final Refueling refueling;
@@ -13,9 +12,9 @@ class _RefuelingTitle extends StatelessWidget {
   _RefuelingTitle({Key key, @required this.refueling}) : super(key: key);
 
   dateField(context) => TextSpan(
-      text: AutodoLocalizations.onLiteral +
+      text: currentL10n(context).onLiteral +
           ' ' +
-          AutodoLocalizations.dateFormat(refueling.date) +
+          currentL10n(context).dateFormat(refueling.date) +
           ' ',
       style: Theme.of(context).primaryTextTheme.body1);
 
@@ -24,17 +23,17 @@ class _RefuelingTitle extends StatelessWidget {
         text: TextSpan(
           children: [
             TextSpan(
-                text: AutodoLocalizations.refueling + ' ',
+                text: currentL10n(context).refueling + ' ',
                 style: Theme.of(context).primaryTextTheme.body1),
             dateField(context),
             TextSpan(
-                text: AutodoLocalizations.at + ' ',
+                text: currentL10n(context).at + ' ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
                 text: refueling.mileage.toString() + ' ',
                 style: Theme.of(context).primaryTextTheme.subtitle),
             TextSpan(
-                text: AutodoLocalizations.distanceUnits,
+                text: currentL10n(context).distanceUnits,
                 style: Theme.of(context).primaryTextTheme.body1)
           ],
         ),
@@ -51,10 +50,10 @@ class _RefuelingCost extends StatelessWidget {
         text: TextSpan(
           children: [
             TextSpan(
-                text: AutodoLocalizations.totalCost + ': ',
+                text: currentL10n(context).totalCost + ': ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
-                text: AutodoLocalizations.moneyUnits +
+                text: currentL10n(context).moneyUnits +
                     refueling.cost.toStringAsFixed(2),
                 style: Theme.of(context).primaryTextTheme.subtitle),
           ],
@@ -72,13 +71,13 @@ class _RefuelingAmount extends StatelessWidget {
         text: TextSpan(
           children: [
             TextSpan(
-                text: AutodoLocalizations.totalAmount + ': ',
+                text: currentL10n(context).totalAmount + ': ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
                 text: refueling.amount.toStringAsFixed(2),
                 style: Theme.of(context).primaryTextTheme.subtitle),
             TextSpan(
-                text: ' ' + AutodoLocalizations.fuelUnits,
+                text: ' ' + currentL10n(context).fuelUnits,
                 style: Theme.of(context).primaryTextTheme.body1)
           ],
         ),

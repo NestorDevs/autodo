@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/routes.dart';
-import 'package:autodo/localization.dart';
 import '../../widgets/barrel.dart';
 
 class LoginForm extends StatefulWidget {
@@ -43,7 +42,7 @@ class _LoginFormState extends State<LoginForm> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        AutodoLocalizations.loginFailure,
+                        currentL10n(context).loginFailure,
                       ),
                       Icon(Icons.error)
                     ],
@@ -62,7 +61,7 @@ class _LoginFormState extends State<LoginForm> {
                   content: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(AutodoLocalizations.loggingInEllipsis),
+                      Text(currentL10n(context).loggingInEllipsis),
                       CircularProgressIndicator(),
                     ],
                   ),

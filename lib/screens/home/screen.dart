@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
-import 'package:autodo/localization.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/widgets/widgets.dart';
@@ -167,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 bannerShown: _bannerShown,
                 child: Scaffold(
                     appBar: AppBar(
-                      title: Text(AutodoLocalizations.appTitle),
+                      title: Text(currentL10n(context).appTitle),
                       actions: [ExtraActions()],
                     ),
                     drawer: NavDrawer(),

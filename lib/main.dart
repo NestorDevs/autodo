@@ -9,7 +9,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:sentry/sentry.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'models/models.dart';
 import 'widgets/widgets.dart';
 import 'blocs/blocs.dart';
 import 'screens/screens.dart';
@@ -39,10 +42,19 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
 void run(bool integrationTest) async {
   final AuthRepository authRepository = FirebaseAuthRepository();
   ThemeData theme = createTheme();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final lang = prefs.getString('locale-language');
+  final country = prefs.getString('locale-country');
+  final locale = (lang != null && country != null) ? Locale(lang, country) : null;
   runApp(
-    BlocProvider<AuthenticationBloc>(
-      create: (context) => AuthenticationBloc(userRepository: authRepository)
-        ..add(AppStarted(integrationTest: integrationTest)),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthenticationBloc>(
+          create: (context) => AuthenticationBloc(userRepository: authRepository)
+            ..add(AppStarted(integrationTest: integrationTest))),
+        BlocProvider<L10nBloc>(
+          create: (context) => L10nBloc()..add(LoadL10n(locale))),
+      ],
       child: BlocProvider<DatabaseBloc>(
         create: (context) => DatabaseBloc(
           authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
@@ -81,12 +93,14 @@ void run(bool integrationTest) async {
                     notificationsBloc:
                         BlocProvider.of<NotificationsBloc>(context),
                     carsBloc: BlocProvider.of<CarsBloc>(context),
-                    repeatsBloc: BlocProvider.of<RepeatsBloc>(context))
+                    repeatsBloc: BlocProvider.of<RepeatsBloc>(context),
+                    l10nBloc: BlocProvider.of<L10nBloc>(context))
                   ..add(LoadTodos()),
                 child: App(
                     theme: theme,
                     authRepository: authRepository,
-                    integrationTest: integrationTest),
+                    integrationTest: integrationTest,
+                    locale: locale),
               ),
             ),
           ),
@@ -134,8 +148,9 @@ class App extends StatelessWidget {
   final ThemeData _theme;
   final AuthRepository _authRepository;
   final bool integrationTest;
+  final Locale locale;
 
-  App({@required theme, @required authRepository, this.integrationTest})
+  App({@required theme, @required authRepository, this.integrationTest, this.locale})
       : assert(theme != null),
         assert(authRepository != null),
         _theme = theme,
@@ -174,6 +189,24 @@ class App extends StatelessWidget {
       },
       theme: _theme,
       debugShowCheckedModeBanner: false,
+      locale: locale, // if this is null then the system default is used
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale('en', 'US'),
+        Locale('en', 'GB')
+      ],
+      localeResolutionCallback:
+          (Locale locale, Iterable<Locale> supportedLocales) {
+        // Try to match both country and language, then just language, then
+        // default to first locale
+        var newLocale = supportedLocales.firstWhere((l) => l.languageCode == locale.languageCode && l.countryCode == locale.countryCode, orElse: () => null);
+        newLocale = newLocale ?? supportedLocales.firstWhere((l) => l.languageCode == locale.languageCode, orElse: () => null);
+        BlocProvider.of<L10nBloc>(context).add(LoadL10n(newLocale ?? supportedLocales.first));
+        return newLocale;
+      },
     );
   }
 }
